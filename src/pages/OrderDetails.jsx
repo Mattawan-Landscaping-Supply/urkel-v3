@@ -317,7 +317,7 @@ export default function OrderDetails() {
   // Real-time subscription for delivery reminders
   useEffect(() => {
     const unsubscribe = base44.entities.DeliveryReminder.subscribe((event) => {
-      queryClient.invalidateQueries(['deliveryReminders']);
+      queryClient.removeQueries(['deliveryReminders']);
     });
     return unsubscribe;
   }, [queryClient]);
@@ -351,8 +351,8 @@ export default function OrderDetails() {
   const updateOrderMutation = useMutation({
     mutationFn: (data) => base44.entities.Order.update(orderId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['order', orderId]);
-      queryClient.invalidateQueries(['orders']);
+      queryClient.removeQueries(['order', orderId]);
+      queryClient.removeQueries(['orders']);
     }
   });
 
@@ -401,8 +401,8 @@ export default function OrderDetails() {
     onSuccess: () => {
       setDeleteProgress(null);
       // Clear all order-related cache before redirecting
-      queryClient.invalidateQueries(['orders']);
-      queryClient.invalidateQueries(['order', orderId]);
+      queryClient.removeQueries(['orders']);
+      queryClient.removeQueries(['order', orderId]);
       queryClient.removeQueries(['order', orderId]);
       queryClient.removeQueries(['items', orderId]);
       window.location.href = createPageUrl('Dashboard');
@@ -442,10 +442,10 @@ export default function OrderDetails() {
       return base44.entities.OrderItem.create(itemData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['items', orderId]);
-      queryClient.invalidateQueries(['receipts', orderId]);
-      queryClient.invalidateQueries(['allOrderItems']);
-      queryClient.invalidateQueries(['allLoadItemsRaw', orderId]);
+      queryClient.removeQueries(['items', orderId]);
+      queryClient.removeQueries(['receipts', orderId]);
+      queryClient.removeQueries(['allOrderItems']);
+      queryClient.removeQueries(['allLoadItemsRaw', orderId]);
     }
   });
 
@@ -481,12 +481,12 @@ export default function OrderDetails() {
       return base44.entities.OrderItem.bulkCreate(itemsWithData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['items', orderId]);
-      queryClient.invalidateQueries(['receipts', orderId]);
-      queryClient.invalidateQueries(['order', orderId]);
-      queryClient.invalidateQueries(['orders']);
-      queryClient.invalidateQueries(['allOrderItems']);
-      queryClient.invalidateQueries(['allLoadItemsRaw', orderId]);
+      queryClient.removeQueries(['items', orderId]);
+      queryClient.removeQueries(['receipts', orderId]);
+      queryClient.removeQueries(['order', orderId]);
+      queryClient.removeQueries(['orders']);
+      queryClient.removeQueries(['allOrderItems']);
+      queryClient.removeQueries(['allLoadItemsRaw', orderId]);
     }
   });
 
@@ -515,7 +515,7 @@ export default function OrderDetails() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['items', orderId]);
+      queryClient.removeQueries(['items', orderId]);
     }
   });
 
@@ -526,9 +526,9 @@ export default function OrderDetails() {
       return base44.entities.OrderItem.delete(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['items', orderId]);
-      queryClient.invalidateQueries(['allOrderItems']);
-      queryClient.invalidateQueries(['allLoadItemsRaw', orderId]);
+      queryClient.removeQueries(['items', orderId]);
+      queryClient.removeQueries(['allOrderItems']);
+      queryClient.removeQueries(['allLoadItemsRaw', orderId]);
     }
   });
 
@@ -546,15 +546,15 @@ export default function OrderDetails() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['receipts', orderId]);
-      queryClient.invalidateQueries(['orders']);
+      queryClient.removeQueries(['receipts', orderId]);
+      queryClient.removeQueries(['orders']);
     }
   });
 
   const createReminderMutation = useMutation({
     mutationFn: (data) => base44.entities.DeliveryReminder.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['deliveryReminders']);
+      queryClient.removeQueries(['deliveryReminders']);
       setShowReminderDialog(false);
       setReminderDate('');
       setReminderNotes('');
@@ -564,23 +564,23 @@ export default function OrderDetails() {
   const resolveReminderMutation = useMutation({
     mutationFn: (reminderId) => base44.entities.DeliveryReminder.update(reminderId, { is_resolved: true }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['deliveryReminders', orderId]);
-      queryClient.invalidateQueries(['deliveryReminders']);
+      queryClient.removeQueries(['deliveryReminders', orderId]);
+      queryClient.removeQueries(['deliveryReminders']);
     }
   });
 
   const rescheduleReminderMutation = useMutation({
     mutationFn: ({ reminderId, newDate }) => base44.entities.DeliveryReminder.update(reminderId, { scheduled_date: newDate }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['deliveryReminders', orderId]);
-      queryClient.invalidateQueries(['deliveryReminders']);
+      queryClient.removeQueries(['deliveryReminders', orderId]);
+      queryClient.removeQueries(['deliveryReminders']);
     }
   });
 
   const createCustomerMutation = useMutation({
     mutationFn: (data) => base44.entities.Customer.create(data),
     onSuccess: (newCustomer) => {
-      queryClient.invalidateQueries(['customers']);
+      queryClient.removeQueries(['customers']);
       if (isAddNewCustomerOpen) {
         handleLinkCustomer(newCustomer);
         setIsAddNewCustomerOpen(false);
@@ -761,7 +761,7 @@ export default function OrderDetails() {
           setBatchProgressState(prev => ({ ...prev, isOpen: false }));
         }
 
-        queryClient.invalidateQueries(['items', orderId]);
+        queryClient.removeQueries(['items', orderId]);
         setSelectedMasterItems([]);
         return;
      }
@@ -846,7 +846,7 @@ export default function OrderDetails() {
     const freshItem = freshItems.find(i => i.id === realItemId);
     
     if (!freshItem) {
-        queryClient.invalidateQueries(['items', orderId]);
+        queryClient.removeQueries(['items', orderId]);
         return;
     }
     
@@ -884,7 +884,7 @@ export default function OrderDetails() {
         // Moving FROM master order - always create new item, decrease master qty
         const masterItem = freshItems.find(i => i.id === realItemId);
         if (!masterItem) {
-            queryClient.invalidateQueries(['items', orderId]);
+            queryClient.removeQueries(['items', orderId]);
             return;
         }
 
@@ -902,7 +902,7 @@ export default function OrderDetails() {
           }));
         } catch (e) {
             console.warn('Could not update master item:', e);
-            if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+            if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
             return;
         }
         
@@ -928,7 +928,7 @@ export default function OrderDetails() {
             if (updates.date_arrived) mergeData.date_arrived = updates.date_arrived;
             if (updates.date_on_order) mergeData.date_on_order = updates.date_on_order;
             await retryWithBackoff(() => base44.entities.OrderItem.update(existingMatchForMaster.id, mergeData));
-            if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+            if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
             return;
         }
 
@@ -958,7 +958,7 @@ export default function OrderDetails() {
             is_quote: freshItem.is_quote,
             keep_on_same_load: autoKeepOnSameLoad
         }));
-        if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+        if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
     } else {
         // Moving from a non-master column (on_order, in_hold, delivered)
         // Check if there's an existing item in the target column that matches (same product, color, receipt, location, delivery method)
@@ -987,7 +987,7 @@ export default function OrderDetails() {
 
             await retryWithBackoff(() => base44.entities.OrderItem.update(existingMatch.id, mergeUpdateData));
             await retryWithBackoff(() => base44.entities.OrderItem.delete(realItemId));
-            if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+            if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
         } else if (qtyToMove >= currentQty) {
             // Moving all, no match: just update the existing item's status
             // BUT preserve the original hold_location if moving OUT of hold
@@ -1005,7 +1005,7 @@ export default function OrderDetails() {
             } else {
                 await retryWithBackoff(() => base44.entities.OrderItem.update(realItemId, updates));
             }
-            if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+            if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
         } else {
             // Partial move, no match: decrease source and create new in target
             // Preserve hold_location when moving FROM hold
@@ -1037,7 +1037,7 @@ export default function OrderDetails() {
                 retryWithBackoff(() => base44.entities.OrderItem.update(realItemId, { quantity: currentQty - qtyToMove })),
                 retryWithBackoff(() => base44.entities.OrderItem.create(createData))
             ]);
-            if (!skipInvalidation) await queryClient.invalidateQueries(['items', orderId]);
+            if (!skipInvalidation) await queryClient.removeQueries(['items', orderId]);
         }
     }
 
@@ -1050,15 +1050,15 @@ export default function OrderDetails() {
       if (loadItemsToRemove.length > 0) {
         await Promise.all(loadItemsToRemove.map(li => retryWithBackoff(() => base44.entities.LoadItem.delete(li.id))));
         if (!skipInvalidation) {
-          queryClient.invalidateQueries(['allLoadItemsRaw', orderId]);
+          queryClient.removeQueries(['allLoadItemsRaw', orderId]);
           queryClient.removeQueries({ queryKey: ['loads'] });
-          queryClient.invalidateQueries({ queryKey: ['loads', 'today-banner'] });
+          queryClient.removeQueries({ queryKey: ['loads', 'today-banner'] });
         }
       }
       
       if (order?.is_completed) {
         await base44.entities.Order.update(orderId, { is_completed: false });
-        if (!skipInvalidation) queryClient.invalidateQueries(['order', orderId]);
+        if (!skipInvalidation) queryClient.removeQueries(['order', orderId]);
       }
     }
 
@@ -1107,8 +1107,8 @@ export default function OrderDetails() {
       // Only update if this delivery date is later than the current last date
       if (!currentLastDate || deliveryDate > currentLastDate) {
         await base44.entities.Order.update(orderId, { last_fulfillment_date: deliveryDate });
-        queryClient.invalidateQueries(['order', orderId]);
-        queryClient.invalidateQueries(['orders']);
+        queryClient.removeQueries(['order', orderId]);
+        queryClient.removeQueries(['orders']);
       }
       
       // Debounce these checks to avoid rate limits from rapid sequential API calls (e.g. batch moves)
@@ -1189,8 +1189,8 @@ export default function OrderDetails() {
 
   const handleResetNotificationFlag = async () => {
     await base44.entities.Order.update(orderId, { first_item_moved_notification_sent: false });
-    queryClient.invalidateQueries(['order', orderId]);
-    queryClient.invalidateQueries(['orders']);
+    queryClient.removeQueries(['order', orderId]);
+    queryClient.removeQueries(['orders']);
     toast.success("Notification Reset", {
       description: "Next delivery will trigger a new notification.",
     });
@@ -1281,7 +1281,7 @@ export default function OrderDetails() {
         toast.error(`Failed to move items: ${err.message}`);
       } finally {
         setBatchProgressState(prev => ({ ...prev, isOpen: false }));
-        queryClient.invalidateQueries(['items', orderId]);
+        queryClient.removeQueries(['items', orderId]);
         setSelectedMasterItems([]);
       }
       return;
@@ -1298,7 +1298,7 @@ export default function OrderDetails() {
       toast.success(`Successfully put on order`);
     } catch (err) {
       toast.error(`Failed to move item: ${err.message}`);
-      queryClient.invalidateQueries(['items', orderId]);
+      queryClient.removeQueries(['items', orderId]);
     } finally {
       setBatchProgressState(prev => ({ ...prev, isOpen: false }));
     }
@@ -1434,7 +1434,7 @@ export default function OrderDetails() {
         await Promise.all(group.slice(1).map(item => base44.entities.OrderItem.delete(item.id)));
       }
     }
-    queryClient.invalidateQueries(['items', orderId]);
+    queryClient.removeQueries(['items', orderId]);
     toast.success("Duplicate items merged successfully");
   };
 
@@ -1472,7 +1472,7 @@ export default function OrderDetails() {
           duration: 8000,
         });
         navigate(createPageUrl(`LoadDetails?id=${newLoad.id}`));
-        queryClient.invalidateQueries(['loads', orderId]);
+        queryClient.removeQueries(['loads', orderId]);
         setDeliveryDate(getLocalDateString());
       } catch (error) {
         toast.error("Failed to create load: " + error.message);
@@ -1506,10 +1506,10 @@ export default function OrderDetails() {
       const { loads, strandedItems } = response.data;
 
       // Invalidate queries
-      queryClient.invalidateQueries(['items', orderId]);
+      queryClient.removeQueries(['items', orderId]);
       queryClient.removeQueries({ queryKey: ['loads'] });
-      queryClient.invalidateQueries(['allLoadItemsRaw', orderId]);
-      queryClient.invalidateQueries(['loads', orderId]);
+      queryClient.removeQueries(['allLoadItemsRaw', orderId]);
+      queryClient.removeQueries(['loads', orderId]);
 
       // Show warning if any items couldn't be placed on a load
       if (strandedItems && strandedItems.length > 0) {
@@ -1557,7 +1557,7 @@ export default function OrderDetails() {
         if (newVal > maxAllowed) {
           alert(`Cannot set quantity to ${newVal}. Maximum available is ${maxAllowed} (total ordered: ${originalQty}, already allocated: ${otherUsed}).`);
           // Force refresh to reset input value
-          queryClient.invalidateQueries(['items', orderId]);
+          queryClient.removeQueries(['items', orderId]);
           return;
         }
       }
@@ -1584,7 +1584,7 @@ export default function OrderDetails() {
       setIsBatchProcessing(false);
       setBatchSelectionMode(false);
       setSelectedHoldItemIds([]);
-      queryClient.invalidateQueries(['items', orderId]);
+      queryClient.removeQueries(['items', orderId]);
     }
     if (fulfillmentMethod === 'delivery') {
       toast.success('Items moved to On Delivery.', { description: 'Build a load?', action: { label: 'Build Load', onClick: () => setIsCreateDeliveryDialogOpen(true) }, duration: 8000 });
@@ -1715,7 +1715,7 @@ export default function OrderDetails() {
            <OrderActionButtons
              items={items} order={order} receipts={receipts} allLoadItemsForOrder={allLoadItemsForOrder}
              onPrintTicket={() => setIsPrintTicketOpen(true)}
-             onOrderHistory={() => { queryClient.invalidateQueries(['items', orderId]); setIsOrderHistoryOpen(true); }}
+             onOrderHistory={() => { queryClient.removeQueries(['items', orderId]); setIsOrderHistoryOpen(true); }}
              onResetNotification={handleResetNotificationFlag}
              onSendNotification={sendFirstDeliveryNotification}
              isSendingNotification={isSendingNotification}
@@ -1930,7 +1930,7 @@ export default function OrderDetails() {
         items={items || []}
         order={order}
         initialSelectedIds={printPromptDialog.itemIds}
-        onItemsUpdated={() => queryClient.invalidateQueries(['items', orderId])}
+        onItemsUpdated={() => queryClient.removeQueries(['items', orderId])}
         onConfirmPrint={async (printedItems) => {
           // Items are already marked as delivered in handlePrint
           // Just mark ticket_printed and refresh
@@ -1939,7 +1939,7 @@ export default function OrderDetails() {
             if (!freshItem) continue;
             await base44.entities.OrderItem.update(printItem.id, { ticket_printed: true });
           }
-          queryClient.invalidateQueries(['items', orderId]);
+          queryClient.removeQueries(['items', orderId]);
           setIsPrintTicketOpen(false);
         }}
       />
@@ -2027,7 +2027,7 @@ export default function OrderDetails() {
         onClose={() => setIsLightspeedImportOpen(false)}
         orderId={orderId}
         existingReceipts={uniqueReceipts}
-        onItemsCreated={() => { queryClient.invalidateQueries(['items', orderId]); queryClient.invalidateQueries(['receipts', orderId]); }}
+        onItemsCreated={() => { queryClient.removeQueries(['items', orderId]); queryClient.removeQueries(['receipts', orderId]); }}
         getLocalDateString={getLocalDateString}
       />
 
@@ -2067,7 +2067,7 @@ export default function OrderDetails() {
               queryClient.removeQueries(['order', orderId]);
               queryClient.removeQueries(['items', orderId]);
               queryClient.removeQueries(['receipts', orderId]);
-              queryClient.invalidateQueries(['orders']);
+              queryClient.removeQueries(['orders']);
               navigate(createPageUrl('CompletedOrders'));
             } else {
               checkIfOrderComplete();

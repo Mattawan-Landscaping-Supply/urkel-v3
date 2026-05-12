@@ -1,5 +1,5 @@
 {
-  "name": "Urkel 2.0",
+  "name": "Urkel 3.0",
   "site": {
     "installCommand": "npm install",
     "buildCommand": "npm run build",

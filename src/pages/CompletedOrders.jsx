@@ -133,7 +133,7 @@ export default function CompletedOrders() {
 
   const filteredOrders = orders.filter(order => 
     (order.customer_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.derivedReceipts?.some(r => r.toLowerCase().includes(searchTerm.toLowerCase()))
+    (order.derivedReceipts || []).some(r => (r || '').toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (

@@ -197,7 +197,7 @@ export default function LoadDetails() {
   React.useEffect(() => {
     if (!loadId || hasInvalidatedOnArrival.current) return;
     hasInvalidatedOnArrival.current = true;
-    queryClient.invalidateQueries({ queryKey: ['allOrderItems'], exact: false });
+    queryClient.removeQueries({ queryKey: ['allOrderItems'], exact: false });
   }, [loadId]);
 
   // Check if there are no in_hold items for the linked order and show dialog
@@ -244,8 +244,8 @@ export default function LoadDetails() {
     queryKey: ['loads', 'active'],
     queryFn: async () => {
       const loads = await base44.entities.Load.list('delivery_order', 500);
-      // Include 'scheduled' loads — they should appear in the Delivery Schedule sidebar
-      return loads.filter(l => l.status === 'active' || l.status === 'delivered' || l.status === 'scheduled');
+      // Only show active and delivered loads in the Delivery Schedule sidebar
+      return loads.filter(l => l.status === 'active' || l.status === 'delivered');
     },
     staleTime: 0,
     refetchOnMount: 'always',  // 'always' refetches even if cache exists (not just on first mount)
@@ -362,7 +362,7 @@ export default function LoadDetails() {
   const updateLoadMutation = useMutation({
     mutationFn: ({ loadId, data }) => base44.entities.Load.update(loadId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['load', loadId]);
+      queryClient.removeQueries(['load', loadId]);
       queryClient.removeQueries({ queryKey: ['loads'] });
     }
   });
@@ -393,7 +393,7 @@ export default function LoadDetails() {
     await Promise.all(
       reordered.map((l, idx) => base44.entities.Load.update(l.id, { delivery_order: idx }))
     );
-    queryClient.invalidateQueries(['loads', 'active']);
+    queryClient.removeQueries(['loads', 'active']);
     queryClient.removeQueries({ queryKey: ['loads'] });
   };
 
@@ -560,7 +560,7 @@ export default function LoadDetails() {
   const updateOrderMutation = useMutation({
     mutationFn: ({ orderId, data }) => base44.entities.Order.update(orderId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['orders']);
+      queryClient.removeQueries(['orders']);
     }
   });
 
@@ -585,8 +585,8 @@ export default function LoadDetails() {
     onError: (err) => {
       console.error('addToLoad error full details:', err, err?.response?.data, err?.response?.status);
       alert(`Failed to add item to load: ${err?.message || 'Unknown error'}`);
-      queryClient.invalidateQueries({ queryKey: ['loadItems', loadId] });
-      queryClient.invalidateQueries({ queryKey: ['allOrderItems'], exact: false });
+      queryClient.removeQueries({ queryKey: ['loadItems', loadId] });
+      queryClient.removeQueries({ queryKey: ['allOrderItems'], exact: false });
     },
     onSuccess: async (data) => {
       const { loadItem: newLoadItem, orderItem: updatedOrderItem, orderId } = data || {};
@@ -631,8 +631,8 @@ export default function LoadDetails() {
               customer_name: order.customer_name,
               stop_order: nextStopOrder
             });
-            queryClient.invalidateQueries(['loadCustomerStops', loadId]);
-            queryClient.invalidateQueries(['allLoadCustomerStops']);
+            queryClient.removeQueries(['loadCustomerStops', loadId]);
+            queryClient.removeQueries(['allLoadCustomerStops']);
           }
         }
       }
@@ -673,7 +673,7 @@ export default function LoadDetails() {
         }
       }
       await base44.entities.Load.update(loadId, { schedule_printed: false, receipts_printed: false });
-      queryClient.invalidateQueries(['loads', 'today-banner']);
+      queryClient.removeQueries(['loads', 'today-banner']);
       // Update load cache in place (setQueryData) to avoid scroll-resetting re-mount
       queryClient.setQueryData(['load', loadId], (old) =>
         old ? { ...old, schedule_printed: false, receipts_printed: false } : old
@@ -724,8 +724,8 @@ export default function LoadDetails() {
         }
       },
     onSuccess: () => {
-      queryClient.invalidateQueries(['load', loadId]);
-      queryClient.invalidateQueries(['loadItems', loadId]);
+      queryClient.removeQueries(['load', loadId]);
+      queryClient.removeQueries(['loadItems', loadId]);
     }
   });
 
@@ -785,7 +785,7 @@ export default function LoadDetails() {
         }
       }
     }
-    queryClient.invalidateQueries(['allOrderItems']);
+    queryClient.removeQueries(['allOrderItems']);
   };
 
   const handleSaveEdit = async () => {
@@ -1272,7 +1272,7 @@ export default function LoadDetails() {
                   const hasDeliveredItem = loadItems.some(li => { const oi = li.order_item_id ? allOrderItems.find(x => x.id === li.order_item_id) : null; return oi?.status === 'delivered'; });
                   return !load.is_paid && !alreadyNotified && loadItems.length > 0 && hasDeliveredItem;
                 })() && (
-                  <Button onClick={async () => { if (confirm('Send delivery notification email?')) { try { const response = await base44.functions.invoke('sendDeliveryNotification', { loadId }); if (response?.data?.sent) { alert(`✅ Notification sent to ${response.data.recipients?.join(', ')}`); } else { alert(response?.data?.message || 'Notification not sent.'); } await base44.entities.Load.update(loadId, { delivery_notification_sent: true }); await queryClient.invalidateQueries(['load', loadId]); await queryClient.invalidateQueries(['loads', 'active']); notificationEvents.emit(); } catch (error) { alert('Failed to send notification. Please try again.'); } } }} className="bg-orange-500 hover:bg-orange-600 text-white">
+                  <Button onClick={async () => { if (confirm('Send delivery notification email?')) { try { const response = await base44.functions.invoke('sendDeliveryNotification', { loadId }); if (response?.data?.sent) { alert(`✅ Notification sent to ${response.data.recipients?.join(', ')}`); } else { alert(response?.data?.message || 'Notification not sent.'); } await base44.entities.Load.update(loadId, { delivery_notification_sent: true }); await queryClient.removeQueries(['load', loadId]); await queryClient.removeQueries(['loads', 'active']); notificationEvents.emit(); } catch (error) { alert('Failed to send notification. Please try again.'); } } }} className="bg-orange-500 hover:bg-orange-600 text-white">
                     <FileText className="w-4 h-4 mr-2" />Send Delivery Notification
                   </Button>
                 )}
@@ -1322,7 +1322,7 @@ export default function LoadDetails() {
                     const alreadyNotified = load.delivery_notification_sent || linkedOrder?.first_item_moved_notification_sent;
                     const hasDeliveredItem = loadItems.some(li => { const oi = li.order_item_id ? allOrderItems.find(x => x.id === li.order_item_id) : null; return oi?.status === 'delivered'; });
                     return !load.is_paid && !alreadyNotified && loadItems.length > 0 && hasDeliveredItem ? (
-                      <DropdownMenuItem onClick={async () => { if (confirm('Send delivery notification email?')) { try { const response = await base44.functions.invoke('sendDeliveryNotification', { loadId }); if (response?.data?.sent) { alert(`✅ Notification sent to ${response.data.recipients?.join(', ')}`); } else { alert(response?.data?.message || 'Notification not sent.'); } await base44.entities.Load.update(loadId, { delivery_notification_sent: true }); await queryClient.invalidateQueries(['load', loadId]); notificationEvents.emit(); } catch (error) { alert('Failed to send notification. Please try again.'); } } }}>
+                      <DropdownMenuItem onClick={async () => { if (confirm('Send delivery notification email?')) { try { const response = await base44.functions.invoke('sendDeliveryNotification', { loadId }); if (response?.data?.sent) { alert(`✅ Notification sent to ${response.data.recipients?.join(', ')}`); } else { alert(response?.data?.message || 'Notification not sent.'); } await base44.entities.Load.update(loadId, { delivery_notification_sent: true }); await queryClient.removeQueries(['load', loadId]); notificationEvents.emit(); } catch (error) { alert('Failed to send notification. Please try again.'); } } }}>
                         <FileText className="w-4 h-4 mr-2 text-orange-500" />Send Notification
                       </DropdownMenuItem>
                     ) : null;

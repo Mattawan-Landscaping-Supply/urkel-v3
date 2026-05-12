@@ -27,7 +27,7 @@ export default function PrintSchedule() {
       const allLoads = await base44.entities.Load.list('delivery_order', 500);
       // Get all active and delivered loads for this delivery date, sorted by delivery_order ascending
       return allLoads
-        .filter(l => l.delivery_date === deliveryDate && (l.status === 'active' || l.status === 'delivered' || l.status === 'scheduled'))
+        .filter(l => l.delivery_date === deliveryDate && (l.status === 'active' || l.status === 'delivered'))
         .sort((a, b) => {
           const orderDiff = (a.delivery_order || 0) - (b.delivery_order || 0);
           if (orderDiff !== 0) return orderDiff;

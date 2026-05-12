@@ -1,9 +1,11 @@
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
+
+export const isIframe = window.self !== window.top;
 
 /**
  * Returns today's date as YYYY-MM-DD in local (Eastern) time.
@@ -17,7 +19,8 @@ export function getLocalDateString(date = new Date()) {
 }
 
 /**
- * Safe toLowerCase — never crashes on null/undefined
+ * Safe toLowerCase — never crashes on null/undefined.
+ * All string-based filters MUST use this to prevent render crashes.
  */
 export function safeLower(val) {
   return (val || '').toLowerCase();
@@ -31,7 +34,8 @@ export function displayName(obj) {
 }
 
 /**
- * Load status constants — only these three are valid
+ * Load status constants — ONLY these three are valid.
+ * Never use the string 'scheduled' — it is not a valid Load status.
  */
 export const LOAD_STATUS = {
   ACTIVE: 'active',
