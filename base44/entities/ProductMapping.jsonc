@@ -1,0 +1,32 @@
+{
+  "name": "ProductMapping",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "description": "Product category (e.g. High Format, Unilock, Fendt, Other)"
+    },
+    "urkel_product_name": {
+      "type": "string",
+      "description": "Product name as it appears in Urkel"
+    },
+    "urkel_color": {
+      "type": "string",
+      "description": "Color as it appears in Urkel (blank if no color)"
+    },
+    "urkel_unit": {
+      "type": "string",
+      "description": "Unit type (Pallet, Each, Layer, or custom)"
+    },
+    "lightspeed_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "One or more Lightspeed product name strings that map to this Urkel product/color/unit combination"
+    }
+  },
+  "required": [
+    "urkel_product_name"
+  ]
+}

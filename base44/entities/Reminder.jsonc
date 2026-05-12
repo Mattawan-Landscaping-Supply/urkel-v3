@@ -1,0 +1,45 @@
+{
+  "name": "Reminder",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "What the reminder is about"
+    },
+    "due_time": {
+      "type": "string",
+      "description": "ISO datetime string of when to fire (Eastern Time)"
+    },
+    "is_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the reminder has been marked done"
+    },
+    "is_dismissed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the reminder has been dismissed"
+    },
+    "telegram_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the initial Telegram notification has been sent"
+    },
+    "last_fired_at": {
+      "type": "string",
+      "description": "ISO datetime of the last time a Telegram message was sent"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Optional linked order ID"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Optional customer name for context"
+    }
+  },
+  "required": [
+    "title",
+    "due_time"
+  ]
+}

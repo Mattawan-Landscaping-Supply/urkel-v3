@@ -1,0 +1,51 @@
+{
+  "name": "Customer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Customer or company name"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Primary phone number"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name if different from customer name"
+    },
+    "notes": {
+      "type": "string",
+      "description": "General notes about the customer"
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "call",
+              "email",
+              "meeting",
+              "note"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Log of customer interactions"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

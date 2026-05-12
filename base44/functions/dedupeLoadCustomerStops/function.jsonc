@@ -1,0 +1,4 @@
+{
+  "name": "dedupeLoadCustomerStops",
+  "entry": "entry.ts"
+}

@@ -1,0 +1,84 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the product"
+    },
+    "weight_pallet": {
+      "type": "number",
+      "description": "Weight per pallet in lbs"
+    },
+    "weight_each": {
+      "type": "number",
+      "description": "Weight per each in lbs"
+    },
+    "weight_layer": {
+      "type": "number",
+      "description": "Weight per layer in lbs"
+    },
+    "pallet_width": {
+      "type": "number",
+      "description": "Pallet width in feet (default 3.5)",
+      "default": 3.5
+    },
+    "pallet_depth": {
+      "type": "number",
+      "description": "Pallet depth in feet (default 4)",
+      "default": 4
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "High Format",
+        "Unilock",
+        "Fendt",
+        "Other"
+      ],
+      "default": "Other",
+      "description": "Product category brand"
+    },
+    "colors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Available colors for this product"
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "Pallet",
+        "Each",
+        "Layer"
+      ],
+      "description": "Available units this product can be sold in (can include custom unit types)"
+    },
+    "counts_as_single_pallet": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, any quantity of this product counts as 1 pallet (for Each/Layer units)"
+    },
+    "counts_as_pallet": {
+      "type": "boolean",
+      "default": true,
+      "description": "When false, this product does not count toward pallet totals"
+    },
+    "lightspeed_names": {
+      "type": "object",
+      "description": "Mapping of Lightspeed product names for this product (JSON object)"
+    },
+    "lightspeed_color": {
+      "type": "string",
+      "description": "Lightspeed color field mapping"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}

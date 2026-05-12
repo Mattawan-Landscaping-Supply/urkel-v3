@@ -1,0 +1,38 @@
+{
+  "name": "Receipt",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "ID of the parent Order"
+    },
+    "receipt_number": {
+      "type": "string",
+      "description": "Receipt number identifier"
+    },
+    "is_paid": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this receipt has been fully paid"
+    },
+    "ignore_overdue_alert": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, this receipt will not trigger overdue payment alerts (user has approved payment delay)"
+    },
+    "paid_email_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the paid email notification has been sent for this receipt"
+    },
+    "skip_paid_notification": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, no paid notification email will be sent for this receipt (e.g. paid at time of Lightspeed sale)"
+    }
+  },
+  "required": [
+    "order_id",
+    "receipt_number"
+  ]
+}

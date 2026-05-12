@@ -1,0 +1,28 @@
+{
+  "name": "LoadCustomerStop",
+  "type": "object",
+  "properties": {
+    "load_id": {
+      "type": "string",
+      "description": "ID of the load this stop belongs to"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "ID of the order for this customer stop"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Customer name for this stop"
+    },
+    "stop_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Order of this stop within the load (0-based)"
+    }
+  },
+  "required": [
+    "load_id",
+    "order_id",
+    "customer_name"
+  ]
+}

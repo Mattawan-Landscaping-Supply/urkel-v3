@@ -1,0 +1,67 @@
+{
+  "name": "LoadItem",
+  "type": "object",
+  "properties": {
+    "load_id": {
+      "type": "string",
+      "description": "ID of the load this item belongs to"
+    },
+    "order_item_id": {
+      "type": "string",
+      "description": "ID of the OrderItem this corresponds to (optional for standalone loads)"
+    },
+    "originalProductId": {
+      "type": "string",
+      "description": "ID of the product in the catalog"
+    },
+    "name": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "number",
+      "description": "Weight in kg"
+    },
+    "category": {
+      "type": "string"
+    },
+    "selected_color": {
+      "type": "string"
+    },
+    "selected_unit": {
+      "type": "string",
+      "description": "Unit type (Pallet, Each, Layer)"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1,
+      "description": "Quantity of this item on the load"
+    },
+    "original_status": {
+      "type": "string",
+      "description": "Original status before adding to load (for restoration if removed)"
+    },
+    "original_hold_location": {
+      "type": "string",
+      "description": "Original hold location before adding to load (for restoration if removed)"
+    },
+    "counts_as_pallet": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this item counts toward pallet totals on this load"
+    },
+    "counts_as_single_pallet": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this item counts as exactly 1 pallet regardless of quantity"
+    },
+    "keep_on_same_load": {
+      "type": "boolean",
+      "default": false,
+      "description": "Keep all quantities of this product on the same load (don't split across loads)"
+    }
+  },
+  "required": [
+    "load_id",
+    "name"
+  ]
+}

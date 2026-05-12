@@ -1,0 +1,22 @@
+{
+  "name": "AIMemory",
+  "type": "object",
+  "properties": {
+    "note": {
+      "type": "string",
+      "description": "The thing to remember"
+    },
+    "created_from": {
+      "type": "string",
+      "description": "Brief description of which conversation it came from"
+    },
+    "is_resolved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this memory is no longer relevant"
+    }
+  },
+  "required": [
+    "note"
+  ]
+}

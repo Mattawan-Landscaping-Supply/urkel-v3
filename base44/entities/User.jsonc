@@ -1,0 +1,23 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "notify_on_order_completed": {
+      "type": "boolean",
+      "default": true,
+      "description": "Send notification when orders are completed"
+    },
+    "notify_on_order_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Send notification when orders are archived"
+    },
+    "notification_email": {
+      "type": "string",
+      "description": "Email address for notifications (defaults to user email if not set)"
+    }
+  },
+  "required": [
+    "notification_email"
+  ]
+}

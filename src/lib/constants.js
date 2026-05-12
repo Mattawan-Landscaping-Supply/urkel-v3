@@ -1,0 +1,1 @@
+export const HOLD_LOCATIONS = ['Bay 1', 'Bay 2', 'Bay 3', 'Bay 4', 'Warehouse'];

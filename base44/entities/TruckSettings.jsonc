@@ -1,0 +1,36 @@
+{
+  "name": "TruckSettings",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name for the setting, e.g., 'With Moffett'"
+    },
+    "max_weight_capacity": {
+      "type": "number",
+      "description": "Maximum weight capacity in kg (converted to lbs in UI)"
+    },
+    "length": {
+      "type": "number",
+      "description": "Truck bed length in feet"
+    },
+    "width": {
+      "type": "number",
+      "description": "Truck bed width in feet"
+    },
+    "warning_threshold": {
+      "type": "number",
+      "default": 90,
+      "description": "Warning threshold percentage (default 90%)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if this is the currently active setting"
+    }
+  },
+  "required": [
+    "name",
+    "max_weight_capacity"
+  ]
+}

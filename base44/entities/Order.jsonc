@@ -1,0 +1,59 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "description": "Reference to Customer entity (if using CRM)"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Full name of the customer"
+    },
+    "customer_phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Company name for the order"
+    },
+    "job_name": {
+      "type": "string",
+      "description": "Optional name/identifier for the job"
+    },
+    "job_address": {
+      "type": "string",
+      "description": "Address where the job is located"
+    },
+    "receipt_numbers": {
+      "type": "string",
+      "description": "Comma separated receipt numbers associated with this order"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about the order"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the order is completed and archived"
+    },
+    "is_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether all products are delivered but order is not yet archived"
+    },
+    "first_item_moved_notification_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the first item moved notification has been sent"
+    },
+    "last_fulfillment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Latest date when any item was delivered or picked up"
+    }
+  },
+  "required": []
+}

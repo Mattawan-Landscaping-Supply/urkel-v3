@@ -1,0 +1,32 @@
+{
+  "name": "DeliveryReminder",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "ID of the order this delivery is planned for"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Customer name for quick reference"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date the delivery is planned for"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about this planned delivery"
+    },
+    "is_resolved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the reminder has been resolved (delivery created or cancelled)"
+    }
+  },
+  "required": [
+    "order_id",
+    "scheduled_date"
+  ]
+}

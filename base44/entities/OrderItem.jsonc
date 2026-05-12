@@ -1,0 +1,155 @@
+{
+  "name": "OrderItem",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "ID of the parent Order"
+    },
+    "product_name": {
+      "type": "string",
+      "description": "Name of the product ordered"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "original_quantity": {
+      "type": "number",
+      "description": "Original total quantity ordered (preserved for Master Order display)"
+    },
+    "selected_color": {
+      "type": "string",
+      "description": "Specific color chosen for this item"
+    },
+    "selected_unit": {
+      "type": "string",
+      "enum": [
+        "Pallet",
+        "Each",
+        "Layer"
+      ],
+      "default": "Each",
+      "description": "Unit type for this item"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "order",
+        "on_order",
+        "in_hold",
+        "on_delivery",
+        "delivered",
+        "returned"
+      ],
+      "default": "order",
+      "description": "Current column/stage of the item. 'on_delivery' means assigned to a load but not yet dispatched. 'delivered' means the customer has received it."
+    },
+    "is_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Green check verification for Order column"
+    },
+    "ticket_printed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a pickup ticket has been printed for this item"
+    },
+    "po_number": {
+      "type": "string",
+      "description": "Purchase Order number for On Order items"
+    },
+    "sales_order_number": {
+      "type": "string",
+      "description": "Sales Order number for direct shipments from On Order"
+    },
+    "receipt_number": {
+      "type": "string",
+      "description": "Receipt number for grouping in Master Order"
+    },
+    "is_quote": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a quote (true) or receipt (false)"
+    },
+    "original_quote_number": {
+      "type": "string",
+      "description": "Original quote number if this was converted from a quote"
+    },
+    "date_ordered": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the item was added to Master Order"
+    },
+    "date_on_order": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the item was placed on order"
+    },
+    "date_arrived": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the item arrived (for moving to In Hold)"
+    },
+    "hold_location": {
+      "type": "string",
+      "enum": [
+        "Bay 1",
+        "Bay 2",
+        "Bay 3",
+        "Bay 4",
+        "Warehouse",
+        "Other"
+      ],
+      "description": "Physical location in the hold yard"
+    },
+    "delivery_method": {
+      "type": "string",
+      "enum": [
+        "pickup",
+        "delivery",
+        "direct_ship"
+      ],
+      "default": "pickup"
+    },
+    "date_completed": {
+      "type": "string",
+      "format": "date",
+      "description": "Date picked up or delivered"
+    },
+    "date_returned": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the item was returned"
+    },
+    "return_receipt_number": {
+      "type": "string",
+      "description": "Receipt number for the return"
+    },
+    "is_damaged": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the returned item is damaged (no receipt number required)"
+    },
+    "bol_number": {
+      "type": "string",
+      "description": "Bill of Lading number for direct shipments"
+    },
+    "weight_per_unit": {
+      "type": "number",
+      "description": "Weight per unit in kg (for custom items not in the product catalog)"
+    },
+    "keep_on_same_load": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, all quantities of this product must be on the same load"
+    },
+    "master_item_id": {
+      "type": "string",
+      "description": "Reference to the original master item (for tracking moved portions)"
+    }
+  },
+  "required": [
+    "product_name"
+  ]
+}

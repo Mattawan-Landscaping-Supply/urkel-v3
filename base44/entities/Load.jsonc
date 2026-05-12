@@ -1,0 +1,127 @@
+{
+  "name": "Load",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the load"
+    },
+    "order_id": {
+      "type": "string",
+      "description": "ID of the linked Order (if using existing order)"
+    },
+    "receipt_numbers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Receipt numbers for this delivery"
+    },
+    "truck_setting_id": {
+      "type": "string",
+      "description": "ID of the truck setting used"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the currently active load"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "delivered",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Status of the load - active for current planning, delivered when all items confirmed, archived for historical"
+    },
+    "schedule_batch_id": {
+      "type": "string",
+      "description": "ID to group loads that belong to the same delivery schedule batch"
+    },
+    "packing_strategy": {
+      "type": "string",
+      "enum": [
+        "maxout",
+        "evenly"
+      ],
+      "description": "Which packing strategy was used for this load batch"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Customer name for this delivery"
+    },
+    "customer_address": {
+      "type": "string",
+      "description": "Customer delivery address"
+    },
+    "customer_phone": {
+      "type": "string",
+      "description": "Customer phone number"
+    },
+    "delivery_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of delivery"
+    },
+    "drop_location_notes": {
+      "type": "string",
+      "description": "Special notes about where to drop the products"
+    },
+    "driver_instructions": {
+      "type": "string",
+      "description": "Legacy single driver instructions field (deprecated, use driver_notes instead)"
+    },
+    "driver_notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "after_stop": {
+            "type": "number",
+            "description": "0 = before all stops, 1 = after stop 1, etc."
+          }
+        }
+      },
+      "default": [],
+      "description": "Structured driver notes that appear before/between/after stops on the schedule"
+    },
+    "delivery_order": {
+      "type": "number",
+      "description": "Order of this delivery in the sequence",
+      "default": 0
+    },
+    "manual_pallet_count": {
+      "type": "number",
+      "description": "Manual override for pallet count (if set, uses this instead of calculating)"
+    },
+    "is_paid": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this delivery has been paid for (if true, no notification needed)"
+    },
+    "delivery_notification_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the delivery notification email has been sent"
+    },
+    "schedule_printed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the delivery schedule has been printed for this load's date"
+    },
+    "receipts_printed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the receipt has been printed for this load"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

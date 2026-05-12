@@ -1,0 +1,48 @@
+{
+  "name": "EmailTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name (e.g., 'First Item Delivered')"
+    },
+    "template_type": {
+      "type": "string",
+      "enum": [
+        "first_item_delivered",
+        "order_completed",
+        "order_archived",
+        "delivery_reminder"
+      ],
+      "description": "Type of notification this template is for"
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email address to send notifications to"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line (supports variables)"
+    },
+    "body": {
+      "type": "string",
+      "description": "Email body content (supports variables and HTML)"
+    },
+    "is_html": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the body contains HTML"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this template is currently active"
+    }
+  },
+  "required": [
+    "name",
+    "template_type",
+    "subject",
+    "body"
+  ]
+}

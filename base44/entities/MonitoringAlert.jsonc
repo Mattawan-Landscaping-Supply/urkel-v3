@@ -1,0 +1,41 @@
+{
+  "name": "MonitoringAlert",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "overAllocation",
+        "orphanedItems",
+        "overdueUnpaidReceipts",
+        "missedDeliveries",
+        "completionIntegrity",
+        "unconfirmedDeliveries",
+        "orphaned_delivery",
+        "ready_to_archive",
+        "no_load_built",
+        "pending_arrivals",
+        "noLoadBuilt",
+        "pendingArrivals"
+      ],
+      "description": "The type of monitoring issue detected."
+    },
+    "message": {
+      "type": "string",
+      "description": "A detailed message describing the alert."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "ID of the affected order, if applicable."
+    },
+    "is_resolved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the alert has been reviewed and resolved."
+    }
+  },
+  "required": [
+    "type",
+    "message"
+  ]
+}
